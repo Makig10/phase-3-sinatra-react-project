@@ -60,4 +60,12 @@ def generate_doctor_data(count)
     puts "Name: #{doctor[:name]}, Rating: #{doctor[:rating]}, Sex: #{doctor[:sex]}"
   end
 
+  appointment_dates = []
+  durations = []
+
+  patient_names.each do |patient_name|
+    appointment_dates << Faker::Date.between(from: Date.today, to: Date.today + 30) # Generate random appointment date within the next 30 days
+    durations << Faker::Number.between(from: 15, to: 60) # Generate random appointment duration between 15 and 60 minutes
+  end
+
 puts "✅ Done seeding!"
