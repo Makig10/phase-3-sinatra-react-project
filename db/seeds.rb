@@ -47,10 +47,14 @@ patients = Patient.all
 
 # Seed data for the appointments table
 30.times do
+  
   doctor = Doctor.order('RANDOM()').first
   patient = Patient.order('RANDOM()').first
+  patient_name = patient[:name]
+  doctor_name = doctor[:name]
   appointment_date = Faker::Date.between(from: Date.today, to: Date.today + 30)
   duration = Faker::Number.between(from: 15, to: 60)
+  
 
   Appointment.create(
     doctor_id: doctor.id,
