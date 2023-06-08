@@ -26,34 +26,22 @@ class ApplicationController < Sinatra::Base
     appointments.to_json
   end
 
-  #POST requests (CREATE)
   post '/book_appointment' do
-    # Extract the necessary parameters from the request
-    doctor_name = params[:doctor_name]
-    patient_name = params[:patient_name]
-    appointment_date = params[:appointment_date]
+    patient_name = params[:name]
   
-    # Find an available doctor to assign the patient to
-    doctor = Doctor.includes(:patients).where('patients.id IS NULL').first
+    # Find a doctor to assign the appointment
+    doctor = Doctor.order('RANDOM()').first
   
-    # If there are no available doctors, handle the case accordingly
-    if doctor.nil?
-      return { error: 'No available doctors to assign the patient to.' }.to_json
-    end
-  
-    # Create the new patient record
-    patient = Patient.create(name: patient_name)
-  
-    # Create the new appointment and assign it to the doctor and patient
+    # Create a new appointment with the patient's name and assigned doctor
     new_appointment = Appointment.create(
-      doctor_name: doctor.name,
       patient_name: patient_name,
-      appointment_date: appointment_date,
+      doctor_name: doctor.name,
       doctor_id: doctor.id,
-      patient_id: patient.id
+      appointment_date: Faker::Date.between(from: Date.today, to: Date.today + 30),
+      duration: Faker::Number.between(from: 15, to: 60)
     )
   
-    # Return the newly created appointment as JSON response
     new_appointment.to_json
   end
+
 end
