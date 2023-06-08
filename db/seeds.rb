@@ -51,11 +51,22 @@ durations = []
 end
 
 200.times do |index|
+  patient_id = Faker::Number.between(from: 1, to: 200)
+  patient_name = Patient.find(patient_id).name
+
   Appointment.create(
     doctor_id: Faker::Number.between(from: 1, to: 50),
-    patient_id: Faker::Number.between(from: 1, to: 200),
+    patient_id: patient_id,
     appointment_date: appointment_dates[index],
-    duration: durations[index]
+    duration: durations[index],
+    patient_name: patient_name
   )
+end
+
+# Accessing appointments in the database
+appointments = Appointment.all
+
+appointments.each do |appointment|
+  puts "Doctor ID: #{appointment.doctor_id}, Patient ID: #{appointment.patient_id}, Patient Name: #{appointment.patient_name}, Appointment Date: #{appointment.appointment_date}, Duration: #{appointment.duration}"
 end
 puts "✅ Done seeding!"
