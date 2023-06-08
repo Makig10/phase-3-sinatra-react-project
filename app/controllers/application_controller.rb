@@ -18,6 +18,11 @@ class ApplicationController < Sinatra::Base
     best_doctors = Doctor.order(rating: :desc).limit(10)
     best_doctors.to_json
   end
+
+  get '/all_appointments' do
+    appointments=Appointment.all
+    appointments.to_json
+  end
   
   #POST requests CREATE
   post '/book_appointment' do

@@ -42,7 +42,12 @@ puts "🌱 Seeding data..."
   end
 
   #Making data for "appointments" table in database
-  appointment_dates = []
+  # Accessing existing doctors and patients data
+doctors = Doctor.all
+patients = Patient.all
+
+# Seed data for the appointments table
+appointment_dates = []
 durations = []
 
 200.times do
@@ -51,15 +56,16 @@ durations = []
 end
 
 200.times do |index|
-  patient_id = Faker::Number.between(from: 1, to: 200)
-  patient_name = Patient.find(patient_id).name
+  patient = patients.sample
+  doctor = doctors.sample
 
   Appointment.create(
-    doctor_id: Faker::Number.between(from: 1, to: 50),
-    patient_id: patient_id,
+    doctor_id: doctor.id,
+    doctor_name: doctor.name,
+    patient_id: patient.id,
+    patient_name: patient.name,
     appointment_date: appointment_dates[index],
-    duration: durations[index],
-    patient_name: patient_name
+    duration: durations[index]
   )
 end
 
@@ -67,6 +73,7 @@ end
 appointments = Appointment.all
 
 appointments.each do |appointment|
-  puts "Doctor ID: #{appointment.doctor_id}, Patient ID: #{appointment.patient_id}, Patient Name: #{appointment.patient_name}, Appointment Date: #{appointment.appointment_date}, Duration: #{appointment.duration}"
+  puts "Doctor ID: #{appointment.doctor_id}, Doctor Name: #{appointment.doctor_name}, Patient ID: #{appointment.patient_id}, Patient Name: #{appointment.patient_name}, Appointment Date: #{appointment.appointment_date}, Duration: #{appointment.duration}"
 end
+
 puts "✅ Done seeding!"
