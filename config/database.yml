@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: db/mydatabase.sqlite3
 
 test:
   <<: *default

@@ -20,10 +20,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/all_appointments' do
-    appointments = Appointment.all
-    appointments.to_json
-    #appointments = Appointment.order(id: :desc).limit(400).reverse
+    #appointments = Appointment.all
     #appointments.to_json
+    appointments = Appointment.order(id: :desc).limit(40).reverse
+    appointments.to_json
   end
 
   #POST requests (CREATE)

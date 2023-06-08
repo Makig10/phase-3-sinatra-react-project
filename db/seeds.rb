@@ -41,54 +41,27 @@ patients_data.each do |patient|
   puts "Name: #{patient.name}, Age: #{patient.age}, Condition: #{patient.condition}, Sex: #{patient.sex}"
 end
 
-# Making data for "appointments" table in the database
 # Accessing existing doctors and patients data
 doctors = Doctor.all
 patients = Patient.all
 
 # Seed data for the appointments table
-# Assign patients to doctors
-assigned_doctors = {}
+30.times do
+  doctor = Doctor.order('RANDOM()').first
+  patient = Patient.order('RANDOM()').first
+  appointment_date = Faker::Date.between(from: Date.today, to: Date.today + 30)
+  duration = Faker::Number.between(from: 15, to: 60)
 
-patients_data.each do |patient|
-  doctor = doctors_data.sample
-
-  # Assign the patient to the doctor
-  assigned_doctors[doctor.id] ||= []
-  assigned_doctors[doctor.id] << patient
+  Appointment.create(
+    doctor_id: doctor.id,
+    patient_id: patient.id,
+    appointment_date: appointment_date,
+    duration: duration
+  )
 end
 
-# Generate data for appointments based on the assigned doctors and patients
-appointment_dates = []
-durations = []
+puts "✅ Appointments seeded successfully!"
 
-50.times do
-  appointment_dates << Faker::Date.between(from: Date.today, to: Date.today + 30)
-  durations << Faker::Number.between(from: 15, to: 60)
-end
 
-appointments = []
-
-assigned_doctors.each do |doctor_id, patients|
-  patients.each_with_index do |patient, index|
-    appointment = Appointment.new(
-      doctor_id: doctor_id,
-      doctor_name: Doctor.find(doctor_id).name,
-      patient_id: patient.id,
-      patient_name: patient.name,
-      appointment_date: appointment_dates[index],
-      duration: durations[index]
-    )
-    appointments << appointment
-  end
-end
-
-# Save the appointments
-appointments.each(&:save)
-
-# Print the appointments
-appointments.each do |appointment|
-  puts "ID: #{appointment.id}, Doctor ID: #{appointment.doctor_id}, Doctor Name: #{appointment.doctor_name}, Patient ID: #{appointment.patient_id}, Patient Name: #{appointment.patient_name}, Appointment Date: #{appointment.appointment_date}, Duration: #{appointment.duration}, Created At: #{appointment.created_at}, Updated At: #{appointment.updated_at}"
-end
 
 puts "✅ Done seeding!"
