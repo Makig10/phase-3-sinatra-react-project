@@ -22,14 +22,20 @@ class ApplicationController < Sinatra::Base
   end
   
   post '/book_appointment' do
+   #request.body.rewind => check this out
+   #request_payload => check this
+
     #request_body = JSON.parse(request.body.read)
     #patient_name = request_body['name']
     #doctor_name = request_body['doctor_name']
+
     # Retrieve the patient name from the request parameters
-    patient_name = params[:name]
+    #patient_name = params[:name]
     
     # Retrieve the doctor name from the request parameters
-    doctor_name = params[:doctor_name]
+    #doctor_name = params[:doctor_name]
+    patient_name = params[:patient_name]
+   doctor_name = params[:doctor_name]
   
     # Find the doctor with the matching name
     doctor = Doctor.find_by(name: doctor_name)
