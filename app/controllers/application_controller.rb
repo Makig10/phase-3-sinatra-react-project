@@ -62,17 +62,21 @@ class ApplicationController < Sinatra::Base
 
 
   #Delete appointment record by params
-  delete '/appointments/:patient_name' do
-    # Retrieve the patient name from the request parameters
-    patient_name = params[:patient_name]
-    
-    # Find the appointment with the matching patient name
-    appointments = Appointment.where(patient_name: patient_name)
-    
-     #Delete the appointment
-    appointments.destroy_all
-    
-    "Appointments with patient name '#{patient_name}' have been deleted."
+  delete '/appointments/:appointment_id' do
+     # Retrieve the appointment ID from the request parameters
+  appointment_id = params[:appointment_id]
+
+  # Find the appointment with the matching ID
+  appointment = Appointment.find_by(id: appointment_id)
+
+     if   appointment.nil?
+       status 404
+       body "Appointment with ID '#{appointment_id}' not found."
+    else
+    # Delete the appointment
+      appointment.destroy
+      "Appointment with ID '#{appointment_id}' has been deleted."
+    end
   end
 
      
