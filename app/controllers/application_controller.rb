@@ -27,21 +27,25 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/book_appointment' do
+    # Retrieve the patient name from the request parameters
     patient_name = params[:name]
   
     # Find a doctor to assign the appointment
     doctor = Doctor.order('RANDOM()').first
   
-    # Create a new appointment with the patient's name and assigned doctor
+    # Create a new patient
+    patient = Patient.create(name: patient_name)
+  
+    # Create the new appointment
     new_appointment = Appointment.create(
       patient_name: patient_name,
-      doctor_name: doctor.name,
+      patient_id: patient.id,
       doctor_id: doctor.id,
+      doctor_name: doctor.name,
       appointment_date: Faker::Date.between(from: Date.today, to: Date.today + 30),
       duration: Faker::Number.between(from: 15, to: 60)
     )
   
     new_appointment.to_json
   end
-
 end
