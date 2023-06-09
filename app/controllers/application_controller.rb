@@ -22,6 +22,9 @@ class ApplicationController < Sinatra::Base
   end
   
   post '/book_appointment' do
+    #request_body = JSON.parse(request.body.read)
+    #patient_name = request_body['name']
+    #doctor_name = request_body['doctor_name']
     # Retrieve the patient name from the request parameters
     patient_name = params[:name]
     
@@ -47,23 +50,10 @@ class ApplicationController < Sinatra::Base
       appointment_date: Faker::Date.between(from: Date.today, to: Date.today + 30),
       duration: Faker::Number.between(from: 15, to: 60)
     )
-    
+    #content_type :json
     new_appointment.to_json
   end
 
-  #Delete appointment record by params
-  delete '/appointments/:patient_name' do
-    # Retrieve the patient name from the request parameters
-    patient_name = params[:patient_name]
-    
-    # Find the appointment with the matching patient name
-    appointments = Appointment.where(patient_name: patient_name)
-    
-    # Delete the appointment
-    appointments.destroy_all
-    
-    "Appointments with patient name '#{patient_name}' have been deleted."
-  end
      
 
 end
