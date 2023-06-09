@@ -75,3 +75,49 @@ post '/book_appointment' do
     )
     content_type :json
     new_appointment.to_json
+
+
+     post '/book_appointment' do
+    request_body = JSON.parse(request.body.read)
+    patient_name = request_body['name']
+    doctor_name = request_body['doctor_name']
+  
+    # Find the doctor with the matching name
+    doctor = Doctor.find_by(name: doctor_name)
+  
+    if doctor.nil?
+      return { error: "Doctor with name '#{doctor_name}' not found." }.to_json
+    end
+  
+    # Create a new patient
+    patient = Patient.create(name: patient_name)
+  
+    # Create the new appointment
+    new_appointment = Appointment.create(
+      patient_name: patient_name,
+      patient_id: patient.id,
+      doctor_id: doctor.id,
+      doctor_name: doctor.name,
+      appointment_date: Faker::Date.between(from: Date.today, to: Date.today + 30),
+      duration: Faker::Number.between(from: 15, to: 60)
+    )
+  
+    content_type :json
+    new_appointment.to_json
+  end
+     # Return the newly created appointment as JSON
+ 
+
+  Delete appointment record by params
+  delete '/appointments/:patient_name' do
+    # Retrieve the patient name from the request parameters
+    patient_name = params[:patient_name]
+    
+    # Find the appointment with the matching patient name
+    appointments = Appointment.where(patient_name: patient_name)
+    
+     Delete the appointment
+    appointments.destroy_all
+    
+    "Appointments with patient name '#{patient_name}' have been deleted."
+  end

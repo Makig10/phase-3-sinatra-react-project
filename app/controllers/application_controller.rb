@@ -60,6 +60,21 @@ class ApplicationController < Sinatra::Base
     new_appointment.to_json
   end
 
+
+  #Delete appointment record by params
+  delete '/appointments/:patient_name' do
+    # Retrieve the patient name from the request parameters
+    patient_name = params[:patient_name]
+    
+    # Find the appointment with the matching patient name
+    appointments = Appointment.where(patient_name: patient_name)
+    
+     #Delete the appointment
+    appointments.destroy_all
+    
+    "Appointments with patient name '#{patient_name}' have been deleted."
+  end
+
      
 
 end
